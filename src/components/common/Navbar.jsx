@@ -39,7 +39,7 @@ const Navbar = () => {
               className="flex items-center text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
             >
               <HeartIcon className="h-6 w-6 mr-1" />
-              <span className="hidden sm:inline">Wishlist</span>
+              <span className="hidden sm:inline">Course list</span>
             </Link>
             <Link to="/admin/dashboard" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
               Admin

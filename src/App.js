@@ -10,6 +10,7 @@ import BecomeInstructor from './pages/instructor/BecomeInstructor';
 import InstructorDashboard from './pages/instructor/Dashboard';
 import BrowseCourses from './pages/courses/BrowseCourses';
 import Wishlist from './pages/wishlist/Wishlist';
+import MyLearning from './pages/learning/MyLearning';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/instructor/dashboard" element={<InstructorDashboard />} />
         <Route path="/courses" element={<BrowseCourses />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/my-learning" element={<MyLearning />} />
       </Routes>
     </Router>
   );

@@ -67,10 +67,10 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-6">
-              Master Web3 Development
+              Elevate Your Tech Skills
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8">
-              Join the next generation of blockchain developers with C3Academy
+              From Web3 to full-stack development - master modern programming with C3Academy
             </p>
             <div className="space-x-4">
               <Link
@@ -138,7 +138,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
-            <p className="text-gray-400 mb-8">Join thousands of developers learning Web3 development</p>
+            <p className="text-gray-400 mb-8">Join thousands of developers learning Programming</p>
             <Link
               to="/register"
               className="inline-flex items-center px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-full font-semibold transition-all"
