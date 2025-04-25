@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserCircleIcon, AcademicCapIcon, ClockIcon, StarIcon } from '@heroicons/react/24/outline';
-import Navbar from '../../components/common/Navbar';
-import Footer from '../../components/common/Footer';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
+import Navbar from '../../components/common/Navbar';
+import Footer from '../../components/common/Footer';
+import WalletConnector from '../../components/wallet/WalletConnector';
+import StatCard from '../../components/profile/StatCard';
+import LearningCourseCard from '../../components/learning/LearningCourseCard';
 
 const Profile = () => {
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState('');
+  
   const userProfile = {
     name: 'John Doe',
     email: 'john.doe@example.com',
@@ -18,29 +24,61 @@ const Profile = () => {
     pendingInstructorApplication: false // Add this field
   };
 
+  // Update the enrolledCourses to match the format expected by LearningCourseCard
   const enrolledCourses = [
     {
       id: 1,
       title: 'Web3 Development Fundamentals',
+      instructor: 'John Smith',
+      rating: 4.9,
+      students: 2156,
+      level: 'Beginner',
+      slug: 'web3-fundamentals',
       progress: 80,
-      lastAccessed: '2 days ago',
-      image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Web3'
+      lastAccessed: '2 days ago'
     },
     {
       id: 2,
       title: 'Smart Contract Development',
+      instructor: 'Emma Wilson',
+      rating: 4.8,
+      students: 1789,
+      level: 'Intermediate',
+      slug: 'smart-contract-development',
       progress: 45,
-      lastAccessed: '1 week ago',
-      image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=Smart+Contracts'
+      lastAccessed: '1 week ago'
     },
     {
       id: 3,
       title: 'DeFi Protocol Engineering',
+      instructor: 'Michael Chen',
+      rating: 4.7,
+      students: 3245,
+      level: 'Advanced',
+      slug: 'defi-protocol-engineering',
       progress: 20,
-      lastAccessed: '3 days ago',
-      image: 'https://placehold.co/600x400/1a1a1a/ffffff?text=DeFi'
+      lastAccessed: '3 days ago'
     }
   ];
+
+  const connectWallet = async () => {
+    try {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setWalletAddress(accounts[0]);
+        setIsWalletConnected(true);
+      } else {
+        alert('Please install MetaMask or another Web3 wallet to connect');
+      }
+    } catch (error) {
+      console.error('Error connecting to wallet:', error);
+    }
+  };
+
+  const disconnectWallet = () => {
+    setWalletAddress('');
+    setIsWalletConnected(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -60,89 +98,70 @@ const Profile = () => {
                 <h1 className="text-3xl font-bold">{userProfile.name}</h1>
                 <p className="text-gray-400">{userProfile.email}</p>
                 <p className="text-sm text-gray-500 mt-1">Member since {userProfile.joinedDate}</p>
+                
+                {isWalletConnected && (
+                  <div className="mt-2 flex items-center">
+                    <span className="text-sm text-green-400">
+                      {`${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}`}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
             
-            {!userProfile.isInstructor && !userProfile.pendingInstructorApplication && (
-              <Link
-                to="/become-instructor"
-                className="flex items-center px-4 py-2 bg-primary hover:bg-primary/90 rounded-lg transition-all"
-              >
-                <PlusIcon className="w-5 h-5 mr-2" />
-                Become an Instructor
-              </Link>
-            )}
-            
-            {userProfile.isInstructor && (
-              <Link
-                to="/instructor/dashboard"
-                className="px-4 py-2 bg-primary hover:bg-primary/90 rounded-lg transition-all"
-              >
-                Instructor Dashboard
-              </Link>
-            )}
-            
-            {userProfile.pendingInstructorApplication && (
-              <span className="text-yellow-500">Application Under Review</span>
-            )}
+            <div className="flex items-center space-x-4">
+              <WalletConnector 
+                isConnected={isWalletConnected}
+                address={walletAddress}
+                onConnect={connectWallet}
+                onDisconnect={disconnectWallet}
+              />
+              
+              {!userProfile.isInstructor && !userProfile.pendingInstructorApplication && (
+                <Link
+                  to="/become-instructor"
+                  className="flex items-center px-4 py-2 bg-primary hover:bg-primary/90 rounded-lg transition-all"
+                >
+                  <PlusIcon className="w-5 h-5 mr-2" />
+                  Become an Instructor
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gray-800 rounded-xl p-6">
-            <div className="flex items-center space-x-3">
-              <AcademicCapIcon className="w-8 h-8 text-primary" />
-              <div>
-                <p className="text-gray-400">Courses Enrolled</p>
-                <p className="text-2xl font-bold">{userProfile.coursesEnrolled}</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-800 rounded-xl p-6">
-            <div className="flex items-center space-x-3">
-              <StarIcon className="w-8 h-8 text-yellow-500" />
-              <div>
-                <p className="text-gray-400">Average Rating</p>
-                <p className="text-2xl font-bold">{userProfile.averageRating}</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-800 rounded-xl p-6">
-            <div className="flex items-center space-x-3">
-              <ClockIcon className="w-8 h-8 text-green-500" />
-              <div>
-                <p className="text-gray-400">Completed Courses</p>
-                <p className="text-2xl font-bold">{userProfile.coursesCompleted}</p>
-              </div>
-            </div>
-          </div>
+          <StatCard 
+            icon={AcademicCapIcon} 
+            title="Courses Enrolled" 
+            value={userProfile.coursesEnrolled} 
+            iconColor="text-primary" 
+          />
+          <StatCard 
+            icon={StarIcon} 
+            title="Average Rating" 
+            value={userProfile.averageRating} 
+            iconColor="text-yellow-500" 
+          />
+          <StatCard 
+            icon={ClockIcon} 
+            title="Completed Courses" 
+            value={userProfile.coursesCompleted} 
+            iconColor="text-green-500" 
+          />
         </div>
 
-        {/* Enrolled Courses */}
+        {/* Enrolled Courses - updated to use LearningCourseCard */}
         <div>
           <h2 className="text-2xl font-bold mb-6">My Courses</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {enrolledCourses.map((course) => (
-              <div key={course.id} className="bg-gray-800 rounded-xl overflow-hidden">
-                <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold mb-3">{course.title}</h3>
-                  <div className="mb-4">
-                    <div className="flex justify-between text-sm text-gray-400 mb-2">
-                      <span>Progress</span>
-                      <span>{course.progress}%</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full" 
-                        style={{ width: `${course.progress}%` }}
-                      />
-                    </div>
-                  </div>
-                  <p className="text-sm text-gray-400">Last accessed {course.lastAccessed}</p>
-                </div>
-              </div>
+              <LearningCourseCard 
+                key={course.id} 
+                course={course} 
+                isCompleted={false} 
+              />
             ))}
           </div>
         </div>

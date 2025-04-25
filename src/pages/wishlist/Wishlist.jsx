@@ -51,7 +51,7 @@ const Wishlist = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div className="flex items-center mb-8">
           <HeartIconSolid className="h-8 w-8 text-red-500 mr-3" />
-          <h1 className="text-3xl font-bold">My Wishlist</h1>
+          <h1 className="text-3xl font-bold">My Course list</h1>
         </div>
 
         {wishlistCourses.length === 0 ? (
